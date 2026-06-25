@@ -10,13 +10,18 @@ export default function ProductCard({ product }) {
 
       {/* Image box */}
       <div className="bg-[#F0E8D8] aspect-square overflow-hidden mb-3 relative rounded-md">
-        
+        {product.badge && (
+          <span className="absolute top-2 left-2 bg-stone-900 text-white text-[10px] px-2 py-1 rounded uppercase font-semibold z-10">
+            {product.badge}
+          </span>
+        )}
+
         {/* Dynamic Media Renderer — Evaluates images first, falls back gracefully to emojis */}
         <div className="w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
           {product.image ? (
-            <img 
-              src={product.image} 
-              alt={product.name} 
+            <img
+              src={product.image}
+              alt={product.name}
               className="w-full h-full object-cover"
               onError={(e) => {
                 // If a path string exists but the file fails to load, gracefully fall back to its emoji icon
