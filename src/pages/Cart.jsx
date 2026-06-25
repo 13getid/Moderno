@@ -16,13 +16,13 @@ export default function Cart() {
 
   if (cartCount === 0) {
     return (
-      <div className="bg-[#F5F0E8] min-h-screen flex flex-col items-center justify-center text-center px-6">
+      <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen flex flex-col items-center justify-center text-center px-6">
         <div className="text-6xl mb-6">🛒</div>
-        <h2 className="text-2xl font-bold text-stone-900 mb-2">Your cart is empty</h2>
-        <p className="text-stone-500 text-sm mb-8">Looks like you haven't added anything yet.</p>
+        <h2 className="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-2">Your cart is empty</h2>
+        <p className="text-stone-500 dark:text-stone-400 text-sm mb-8">Looks like you haven't added anything yet.</p>
         <Link
           to="/shop"
-          className="bg-stone-900 text-white px-8 py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors"
+          className="bg-stone-900 dark:bg-ink-dark text-white px-8 py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors"
         >
           START SHOPPING
         </Link>
@@ -31,10 +31,10 @@ export default function Cart() {
   }
 
   return (
-    <div className="bg-[#F5F0E8] min-h-screen">
+    <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
       <div className="max-w-6xl mx-auto px-6 py-12">
-        <h1 className="text-2xl font-bold text-stone-900 mb-2">Your Cart</h1>
-        <p className="text-sm text-stone-500 mb-10">{cartCount} {cartCount === 1 ? 'item' : 'items'}</p>
+        <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-100 mb-2">Your Cart</h1>
+        <p className="text-sm text-stone-500 dark:text-stone-400 mb-10">{cartCount} {cartCount === 1 ? 'item' : 'items'}</p>
 
         <div className="grid lg:grid-cols-3 gap-10">
 
@@ -43,39 +43,39 @@ export default function Cart() {
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-lg p-5 flex items-center gap-5"
+                className="bg-white dark:bg-ink-light rounded-lg p-5 flex items-center gap-5"
               >
                 {/* Product image */}
-                <div className="w-20 h-20 bg-[#F0E8D8] rounded flex items-center justify-center text-3xl shrink-0">
+                <div className="w-20 h-20 bg-[#F0E8D8] dark:bg-ink-light rounded flex items-center justify-center text-3xl shrink-0">
                   {item.emoji}
                 </div>
 
                 {/* Info */}
                 <div className="flex-1">
                   <p className="text-xs text-stone-400 mb-0.5">{item.category}</p>
-                  <p className="font-medium text-stone-900">{item.name}</p>
-                  <p className="text-sm font-semibold text-stone-700 mt-1">{formatKES(item.price)}</p>
+                  <p className="font-medium text-stone-900 dark:text-stone-100">{item.name}</p>
+                  <p className="text-sm font-semibold text-stone-700 dark:text-stone-300 mt-1">{formatKES(item.price)}</p>
                 </div>
 
                 {/* Qty controls */}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => updateQty(item.id, item.qty - 1)}
-                    className="w-7 h-7 bg-stone-100 rounded flex items-center justify-center hover:bg-stone-200"
+                    className="w-7 h-7 bg-stone-100 dark:bg-ink-light rounded flex items-center justify-center hover:bg-stone-200 dark:hover:bg-stone-700"
                   >
                     <Minus size={12} />
                   </button>
                   <span className="w-8 text-center text-sm font-medium">{item.qty}</span>
                   <button
                     onClick={() => updateQty(item.id, item.qty + 1)}
-                    className="w-7 h-7 bg-stone-100 rounded flex items-center justify-center hover:bg-stone-200"
+                    className="w-7 h-7 bg-stone-100 dark:bg-ink-light rounded flex items-center justify-center hover:bg-stone-200 dark:hover:bg-stone-700"
                   >
                     <Plus size={12} />
                   </button>
                 </div>
 
                 {/* Line total */}
-                <p className="w-24 text-right font-semibold text-stone-900 text-sm">
+                <p className="w-24 text-right font-semibold text-stone-900 dark:text-stone-100 text-sm">
                   {formatKES(item.price * item.qty)}
                 </p>
 
@@ -91,9 +91,9 @@ export default function Cart() {
           </div>
 
           {/* Order summary */}
-          <div className="bg-white rounded-lg p-6 h-fit">
-            <h2 className="font-semibold text-stone-900 mb-6">Order Summary</h2>
-            <div className="space-y-3 text-sm text-stone-600 mb-6">
+          <div className="bg-white dark:bg-ink-light rounded-lg p-6 h-fit">
+            <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-6">Order Summary</h2>
+            <div className="space-y-3 text-sm text-stone-600 dark:text-stone-300 mb-6">
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span>{formatKES(subtotal)}</span>
@@ -104,7 +104,7 @@ export default function Cart() {
                   {shipping === 0 ? 'FREE' : formatKES(shipping)}
                 </span>
               </div>
-              <div className="border-t border-stone-100 pt-3 flex justify-between font-semibold text-stone-900">
+              <div className="border-t border-stone-100 dark:border-stone-700 pt-3 flex justify-between font-semibold text-stone-900 dark:text-stone-100">
                 <span>Total</span>
                 <span>{formatKES(total)}</span>
               </div>
@@ -112,12 +112,12 @@ export default function Cart() {
             
             {/* Dynamic free shipping progress prompt */}
             {shipping > 0 && (
-              <p className="text-xs text-[#8B6C42] mb-4 bg-stone-50 p-2.5 rounded border border-stone-100">
+              <p className="text-xs text-[#8B6C42] mb-4 bg-stone-50 dark:bg-ink-light p-2.5 rounded border border-stone-100 dark:border-stone-700">
                 Add <span className="font-semibold">{formatKES(shippingThreshold - subtotal)}</span> more for free shipping!
               </p>
             )}
             
-            <button className="w-full bg-stone-900 text-white py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors">
+            <button className="w-full bg-stone-900 dark:bg-ink-dark text-white py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors">
               PROCEED TO CHECKOUT
             </button>
             <Link to="/shop" className="block text-center text-xs text-stone-400 mt-4 hover:text-stone-600">

@@ -15,7 +15,7 @@ export default function ShopByCategory() {
     <section className="max-w-7xl mx-auto px-6 py-16">
 
       {/* Section heading */}
-      <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 mb-10">
+      <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-10">
         Shop by Category
       </h2>
 
@@ -25,10 +25,10 @@ export default function ShopByCategory() {
           <div
             key={cat.id}
             onClick={() => navigate(`/shop?category=${cat.slug}`)}
-            className="group cursor-pointer rounded-lg overflow-hidden border border-stone-200 hover:shadow-lg transition-all duration-300 bg-white"
+            className="group cursor-pointer rounded-lg overflow-hidden border border-stone-200 dark:border-stone-700 hover:shadow-lg transition-all duration-300 bg-white dark:bg-ink-light"
           >
             {/* Increased height from h-36 to h-56 so your uploaded furniture contents are beautifully visible */}
-            <div className="bg-stone-100 h-56 overflow-hidden flex items-center justify-center text-4xl relative">
+            <div className="bg-stone-100 dark:bg-ink-light h-56 overflow-hidden flex items-center justify-center text-4xl relative">
               {cat.image ? (
                 <img 
                   src={cat.image} 
@@ -49,11 +49,11 @@ export default function ShopByCategory() {
             </div>
 
             {/* Card footer details container */}
-            <div className="bg-[#EDE8DF] py-4 flex flex-col items-center gap-1.5 group-hover:bg-[#E4DDD2] transition-colors duration-300">
+            <div className="bg-[#EDE8DF] dark:bg-ink-dark py-4 flex flex-col items-center gap-1.5 group-hover:bg-[#E4DDD2] dark:group-hover:bg-ink transition-colors duration-300">
               <span className="text-[#8B6C42] transform group-hover:scale-110 transition-transform duration-300">
                 {getIcon(cat.icon)}
               </span>
-              <p className="text-xs font-semibold uppercase tracking-wider text-stone-800">{cat.name}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-stone-800 dark:text-stone-100">{cat.name}</p>
             </div>
           </div>
         ))}
