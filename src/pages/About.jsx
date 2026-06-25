@@ -36,15 +36,15 @@ const team = [
 
 export default function About() {
   return (
-    <div className="bg-[#F5F0E8] min-h-screen">
+    <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
 
       {/* Hero */}
-      <section className="bg-[#EDE8DF] py-24 text-center px-6">
-        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 mb-4">Our Story</p>
-        <h1 className="text-4xl md:text-5xl font-bold text-stone-900 mb-6 max-w-2xl mx-auto leading-tight">
+      <section className="bg-[#EDE8DF] dark:bg-ink-light py-24 text-center px-6">
+        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-4">Our Story</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-stone-900 dark:text-stone-100 mb-6 max-w-2xl mx-auto leading-tight">
           Furniture Made With Purpose
         </h1>
-        <p className="text-stone-600 max-w-xl mx-auto text-sm leading-relaxed">
+        <p className="text-stone-600 dark:text-stone-300 max-w-xl mx-auto text-sm leading-relaxed">
           Moderno was founded in 2026 with one belief: that beautiful furniture
           should not cost the earth — literally or financially. We work directly
           with artisans across East Africa and Southeast Asia to bring timeless
@@ -54,22 +54,22 @@ export default function About() {
 
       {/* Values */}
       <section className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 mb-12">
+        <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-12">
           What We Stand For
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {values.map((v) => (
             <div key={v.title} className="text-center flex flex-col items-center">
               {/* Values Image Container */}
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-stone-200 mb-4 shadow-sm">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-stone-200 dark:bg-stone-700 mb-4 shadow-sm">
                 <img 
                   src={v.image} 
                   alt={v.title} 
                   className="w-full h-full object-cover" 
                 />
               </div>
-              <h3 className="font-semibold text-stone-900 mb-2">{v.title}</h3>
-              <p className="text-sm text-stone-500 leading-relaxed">{v.body}</p>
+              <h3 className="font-semibold text-stone-900 dark:text-stone-100 mb-2">{v.title}</h3>
+              <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed">{v.body}</p>
             </div>
           ))}
         </div>
@@ -89,22 +89,22 @@ export default function About() {
 
       {/* Team */}
       <section className="max-w-7xl mx-auto px-6 py-20">
-        <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 mb-12">
+        <h2 className="text-center text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-12">
           Meet The Team
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 max-w-3xl mx-auto">
           {team.map((member) => (
             <div key={member.name} className="text-center">
               {/* Team Profile Photo Container */}
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-stone-200 mx-auto mb-4 shadow-md">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-stone-200 dark:bg-stone-700 mx-auto mb-4 shadow-md">
                 <img 
                   src={member.image} 
                   alt={member.name} 
                   className="w-full h-full object-cover" 
                 />
               </div>
-              <p className="font-semibold text-stone-900">{member.name}</p>
-              <p className="text-xs text-stone-500 mt-1">{member.role}</p>
+              <p className="font-semibold text-stone-900 dark:text-stone-100">{member.name}</p>
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">{member.role}</p>
             </div>
           ))}
         </div>

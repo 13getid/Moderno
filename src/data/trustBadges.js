@@ -1,6 +1,4 @@
 
-import { formatKES } from '../utils/currency'
-
 export const badges = [
   { id: 1, icon: "truck", 
            title: "Free Shipping",  

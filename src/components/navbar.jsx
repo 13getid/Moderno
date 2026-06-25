@@ -1,87 +1,214 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { Search, User, ShoppingCart, Menu, X } from 'lucide-react'
-import { useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { Home, ShoppingBag, Info, Newspaper, Mail, Search, ShoppingCart, X, Sun, Moon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
+import { useTheme } from '../context/ThemeContext'
 
 const navLinks = [
-  { label: 'Home',     path: '/' },
-  { label: 'Shop',     path: '/shop' },
-  { label: 'About Us', path: '/about' },
-  { label: 'Blog',     path: '/blog' },
-  { label: 'Contact',  path: '/contact' },
+  { label: 'Home',     path: '/',        icon: Home },
+  { label: 'Shop',     path: '/shop',    icon: ShoppingBag },
+  { label: 'About Us', path: '/about',   icon: Info },
+  { label: 'Blog',     path: '/blog',    icon: Newspaper },
+  { label: 'Contact',  path: '/contact', icon: Mail },
 ]
 
 export default function Navbar() {
   const { cartCount } = useCart()
+  const { theme, toggleTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
   const navigate = useNavigate()
+  const isDark = theme === 'dark'
+
+  // Close drawer on Escape + lock body scroll while it's open
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', onKey)
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
 
   return (
-    <nav className="bg-[#F5F0E8] sticky top-0 z-50 border-b border-stone-200">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <>
+      {/* ─── NAVBAR WRAPPER ─── */}
+      <nav className="sticky top-0 z-50 flex justify-center px-5 py-3.5 bg-[rgba(245,240,232,0.85)] dark:bg-[rgba(20,18,16,0.85)] backdrop-blur-md border-b border-brown/10 dark:border-brown/20">
 
-        {/* Logo */}
-        <Link to="/" className="text-base font-bold tracking-[0.18em] text-stone-900">
-          MODERNO
-        </Link>
+        {/* ─── THE CAPSULE ─── */}
+        <div className="relative flex items-center w-full max-w-[900px] h-14 pr-1.5 bg-stone-900 border border-brown/35 rounded-full overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(139,108,66,0.25),inset_0_-1px_0_rgba(0,0,0,0.4)]">
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.path}
-              className="text-sm text-stone-600 hover:text-[#8B6C42] transition-colors"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-
-        {/* Icons */}
-        <div className="flex items-center gap-4 text-stone-700">
-          <Search size={20} className="cursor-pointer hover:text-[#8B6C42] hidden md:block" />
-          <User   size={20} className="cursor-pointer hover:text-[#8B6C42] hidden md:block" />
-
-          {/* Cart icon with live count badge */}
-          <div
-            className="relative cursor-pointer"
-            onClick={() => navigate('/cart')}
+          {/* Logo cap */}
+          <Link
+            to="/"
+            className="relative flex items-center gap-2.5 shrink-0 h-full pl-5 pr-5 rounded-l-full no-underline bg-[linear-gradient(135deg,#2a2215_0%,#1c1917_60%)]"
           >
-            <ShoppingCart size={20} className="hover:text-[#8B6C42]" />
-            {cartCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#8B6C42] text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {cartCount}
-              </span>
-            )}
+            <span className="flex items-center justify-center w-7 h-7 rounded-full border-[1.5px] border-brown shrink-0">
+              <span className="font-['Cormorant_Garamond',serif] text-brown text-base font-semibold leading-none">M</span>
+            </span>
+            <span className="hidden sm:inline font-['Cormorant_Garamond',serif] text-[15px] font-semibold tracking-[0.18em] text-white uppercase whitespace-nowrap">
+              Moder<span className="text-brown">no</span>
+            </span>
+            {/* gradient seam */}
+            <span aria-hidden="true" className="absolute right-0 top-[10%] h-[80%] w-px bg-gradient-to-b from-transparent via-brown to-transparent" />
+          </Link>
+
+          {/* Desktop links */}
+          <div className="hidden md:flex flex-1 items-center justify-center px-1">
+            {navLinks.map(({ label, path, icon: Icon }) => (
+              <NavLink
+                key={label}
+                to={path}
+                end={path === '/'}
+                className="group relative flex flex-col items-center gap-0.5 px-3.5 py-1.5 rounded-full no-underline"
+              >
+                {({ isActive }) => (
+                  <>
+                    <Icon
+                      size={15}
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                      className={`transition-colors ${isActive ? 'text-brown-light' : 'text-stone-400 group-hover:text-brown-light'}`}
+                    />
+                    <span
+                      className={`text-[9px] font-medium tracking-[0.12em] uppercase whitespace-nowrap transition-colors ${isActive ? 'text-brown-light' : 'text-stone-400 group-hover:text-brown-light'}`}
+                    >
+                      {label}
+                    </span>
+                    {isActive && (
+                      <span className="absolute bottom-0.5 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-brown" />
+                    )}
+                  </>
+                )}
+              </NavLink>
+            ))}
           </div>
 
-          {/* Hamburger — mobile only */}
+          {/* Divider */}
+          <div className="hidden md:block w-px h-6 mx-1 shrink-0 bg-brown/35" />
+
+          {/* Right actions */}
+          <div className="flex items-center gap-0.5 shrink-0 ml-auto md:ml-0 pr-1">
+            <button
+              type="button"
+              title="Search"
+              aria-label="Search"
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+            >
+              <Search size={17} strokeWidth={1.5} aria-hidden="true" />
+            </button>
+
+            <button
+              type="button"
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              onClick={toggleTheme}
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+            >
+              {isDark
+                ? <Sun size={17} strokeWidth={1.5} aria-hidden="true" />
+                : <Moon size={17} strokeWidth={1.5} aria-hidden="true" />}
+            </button>
+
+            <button
+              type="button"
+              title="Cart"
+              aria-label={`Cart, ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
+              onClick={() => navigate('/cart')}
+              className="relative flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+            >
+              <ShoppingCart size={17} strokeWidth={1.5} aria-hidden="true" />
+              {cartCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 flex items-center justify-center w-3.5 h-3.5 rounded-full bg-brown text-white text-[8px] font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Hamburger — mobile only */}
+            <button
+              type="button"
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen(true)}
+              className="md:hidden flex flex-col items-center justify-center gap-1 w-[38px] h-[38px] rounded-full hover:bg-white/[0.07] transition-colors"
+            >
+              <span className="block w-[18px] h-px bg-stone-200 rounded" />
+              <span className="block w-[18px] h-px bg-stone-200 rounded" />
+              <span className="block w-[18px] h-px bg-stone-200 rounded" />
+            </button>
+          </div>
+
+        </div>
+      </nav>
+
+      {/* ─── MOBILE DRAWER ─── */}
+      <div className={`md:hidden fixed inset-0 z-[60] ${menuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+        {/* Overlay */}
+        <div
+          onClick={() => setMenuOpen(false)}
+          className={`absolute inset-0 bg-black/55 transition-opacity duration-300 ${menuOpen ? 'opacity-100' : 'opacity-0'}`}
+        />
+        {/* Panel */}
+        <div
+          className={`absolute right-0 top-0 bottom-0 w-[260px] bg-stone-900 border-l border-brown/35 px-5 py-7 flex flex-col gap-1 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+        >
           <button
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
+            type="button"
+            aria-label="Close menu"
+            onClick={() => setMenuOpen(false)}
+            className="self-end mb-5 text-stone-400 hover:text-brown-light transition-colors"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            <X size={24} />
+          </button>
+
+          {navLinks.map(({ label, path, icon: Icon }) => (
+            <NavLink
+              key={label}
+              to={path}
+              end={path === '/'}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) =>
+                `flex items-center gap-3.5 px-3 py-3 rounded-xl no-underline transition-colors ${
+                  isActive ? 'bg-brown/10 text-brown-light' : 'text-stone-400 hover:bg-brown/10 hover:text-brown-light'
+                }`
+              }
+            >
+              <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
+              <span className="text-[13px] tracking-[0.1em] uppercase">{label}</span>
+            </NavLink>
+          ))}
+
+          <div className="h-px my-2.5 bg-brown/35" />
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            {isDark
+              ? <Sun size={18} strokeWidth={1.5} aria-hidden="true" />
+              : <Moon size={18} strokeWidth={1.5} aria-hidden="true" />}
+            <span className="text-[13px] tracking-[0.1em] uppercase">{isDark ? 'Light mode' : 'Dark mode'}</span>
+          </button>
+          <button
+            type="button"
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            <Search size={18} strokeWidth={1.5} aria-hidden="true" />
+            <span className="text-[13px] tracking-[0.1em] uppercase">Search</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => { setMenuOpen(false); navigate('/cart') }}
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            <ShoppingCart size={18} strokeWidth={1.5} aria-hidden="true" />
+            <span className="text-[13px] tracking-[0.1em] uppercase">Cart{cartCount > 0 ? ` (${cartCount})` : ''}</span>
           </button>
         </div>
-
       </div>
-
-      {/* Mobile menu — slides open when hamburger clicked */}
-      {menuOpen && (
-        <div className="md:hidden bg-[#F5F0E8] border-t border-stone-200 px-6 py-4 flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.path}
-              className="text-sm text-stone-700"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
-    </nav>
+    </>
   )
 }

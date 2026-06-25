@@ -6,7 +6,7 @@ import NewArrivals    from '../sections/NewArrivals'
 
 export default function Home() {
   return (
-    <main className="bg-cream min-h-screen">
+    <main className="bg-cream dark:bg-ink min-h-screen">
       <HeroBanner />
       <TrustBadges />
       <ShopByCategory />

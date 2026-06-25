@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { CartProvider } from './context/CartContext'
+import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
@@ -12,10 +13,12 @@ import Footer from './components/Footer'
 
 export default function App() {
   return (
+    <ThemeProvider>
     <CartProvider>
       <BrowserRouter>
+        <div className="min-h-screen bg-cream dark:bg-ink text-stone-900 dark:text-stone-100 transition-colors duration-300">
         <Navbar />
-        
+
         <Routes>
           <Route path="/"           element={<Home />} />
           <Route path="/shop"       element={<Shop />} />
@@ -30,7 +33,9 @@ export default function App() {
         </Routes>
         
         <Footer />
+        </div>
       </BrowserRouter>
     </CartProvider>
+    </ThemeProvider>
   )
 }

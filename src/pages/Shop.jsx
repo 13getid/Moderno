@@ -53,13 +53,13 @@ export default function Shop() {
   }, [selectedCats, selectedPrice, sort])
 
   return (
-    <div className="bg-[#F5F0E8] min-h-screen">
+    <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
 
       {/* Page header */}
       <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-stone-900">All Products</h1>
-          <p className="text-sm text-stone-500 mt-1">{filtered.length} products</p>
+          <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-100">All Products</h1>
+          <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">{filtered.length} products</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -67,7 +67,7 @@ export default function Shop() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="text-sm border border-stone-200 bg-white px-3 py-2 rounded text-stone-700 cursor-pointer"
+            className="text-sm border border-stone-200 dark:border-stone-700 bg-white dark:bg-ink-light px-3 py-2 rounded text-stone-700 dark:text-stone-300 cursor-pointer"
           >
             {sortOptions.map((o) => (
               <option key={o.value} value={o.value}>{o.label}</option>
@@ -77,7 +77,7 @@ export default function Shop() {
           {/* Mobile filter toggle */}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden flex items-center gap-2 text-sm border border-stone-200 bg-white px-3 py-2 rounded"
+            className="md:hidden flex items-center gap-2 text-sm border border-stone-200 dark:border-stone-700 bg-white dark:bg-ink-light px-3 py-2 rounded"
           >
             <SlidersHorizontal size={14} /> Filters
           </button>
@@ -95,7 +95,7 @@ export default function Shop() {
 
           {/* Category filter */}
           <div className="mb-8">
-            <h3 className="text-xs font-semibold tracking-[0.12em] uppercase text-stone-800 mb-4">
+            <h3 className="text-xs font-semibold tracking-[0.12em] uppercase text-stone-800 dark:text-stone-100 mb-4">
               Category
             </h3>
             {categoryList.map((cat) => (
@@ -109,7 +109,7 @@ export default function Shop() {
                   onChange={() => toggleCat(cat)}
                   className="accent-[#8B6C42] w-4 h-4 cursor-pointer"
                 />
-                <span className="text-sm text-stone-600 group-hover:text-stone-900">
+                <span className="text-sm text-stone-600 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-100">
                   {cat}
                 </span>
               </label>
@@ -118,7 +118,7 @@ export default function Shop() {
 
           {/* Price filter */}
           <div className="mb-8">
-            <h3 className="text-xs font-semibold tracking-[0.12em] uppercase text-stone-800 mb-4">
+            <h3 className="text-xs font-semibold tracking-[0.12em] uppercase text-stone-800 dark:text-stone-100 mb-4">
               Price Range
             </h3>
             {priceRanges.map((range, i) => (
@@ -133,7 +133,7 @@ export default function Shop() {
                   onChange={() => setSelectedPrice(i)}
                   className="accent-[#8B6C42] w-4 h-4 cursor-pointer"
                 />
-                <span className="text-sm text-stone-600 group-hover:text-stone-900">
+                <span className="text-sm text-stone-600 dark:text-stone-300 group-hover:text-stone-900 dark:group-hover:text-stone-100">
                   {range.label}
                 </span>
               </label>

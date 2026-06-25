@@ -13,13 +13,13 @@ export default function Blog() {
     : blogPosts.filter((p) => p.category === activeCat)
 
   return (
-    <div className="bg-[#F5F0E8] min-h-screen">
+    <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
 
       {/* Header */}
-      <section className="bg-[#EDE8DF] py-20 text-center px-6">
-        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 mb-3">The Moderno Journal</p>
-        <h1 className="text-4xl font-bold text-stone-900 mb-4">Ideas for Your Home</h1>
-        <p className="text-sm text-stone-500 max-w-md mx-auto">
+      <section className="bg-[#EDE8DF] dark:bg-ink-light py-20 text-center px-6">
+        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-3">The Moderno Journal</p>
+        <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">Ideas for Your Home</h1>
+        <p className="text-sm text-stone-500 dark:text-stone-400 max-w-md mx-auto">
           Design tips, style guides, and stories from the world of home decor.
         </p>
       </section>
@@ -35,7 +35,7 @@ export default function Blog() {
               className={`px-4 py-2 rounded-full text-xs font-medium border transition-colors ${
                 activeCat === cat
                   ? 'bg-[#8B6C42] text-white border-[#8B6C42]'
-                  : 'bg-white text-stone-600 border-stone-200 hover:border-[#8B6C42]'
+                  : 'bg-white dark:bg-ink-light text-stone-600 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:border-[#8B6C42]'
               }`}
             >
               {cat}
@@ -48,10 +48,10 @@ export default function Blog() {
           {filtered.map((post) => (
             <article
               key={post.id}
-              className="bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
+              className="bg-white dark:bg-ink-light rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
             >
               {/* Thumbnail Container — Now rendering your /public folder image */}
-              <div className="h-48 overflow-hidden bg-[#F0E8D8] relative">
+              <div className="h-48 overflow-hidden bg-[#F0E8D8] dark:bg-ink-light relative">
                 <img 
                   src={post.image} 
                   alt={post.title}
@@ -62,15 +62,15 @@ export default function Blog() {
               {/* Content */}
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xs bg-[#F0E8D8] text-[#8B6C42] px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-[#F0E8D8] dark:bg-ink-light text-[#8B6C42] px-2 py-1 rounded-full font-medium">
                     {post.category}
                   </span>
                   <span className="text-xs text-stone-400">{post.readTime}</span>
                 </div>
-                <h2 className="font-semibold text-stone-900 mb-2 leading-snug group-hover:text-[#8B6C42] transition-colors">
+                <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-2 leading-snug group-hover:text-[#8B6C42] transition-colors">
                   {post.title}
                 </h2>
-                <p className="text-xs text-stone-500 leading-relaxed mb-4">{post.excerpt}</p>
+                <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed mb-4">{post.excerpt}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-400">{post.date}</span>
                   <span className="flex items-center gap-1 text-xs text-[#8B6C42] font-medium">
