@@ -50,10 +50,15 @@ export default function Blog() {
               key={post.id}
               className="bg-white rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
             >
-              {/* Thumbnail */}
-              <div className="bg-[#F0E8D8] h-48 flex items-center justify-center text-6xl group-hover:bg-[#E8DECE] transition-colors">
-                {post.emoji}
+              {/* Thumbnail Container — Now rendering your /public folder image */}
+              <div className="h-48 overflow-hidden bg-[#F0E8D8] relative">
+                <img 
+                  src={post.image} 
+                  alt={post.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
+
               {/* Content */}
               <div className="p-6">
                 <div className="flex items-center gap-3 mb-3">

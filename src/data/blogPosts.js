@@ -11,7 +11,7 @@ export const blogPosts = [
   {
     id: 2,
     title: "The Rise of Sustainable Furniture",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-6.jpg",
     category: "Sustainability",
     date: "May 28, 2026",
     readTime: "6 min read",
@@ -20,7 +20,7 @@ export const blogPosts = [
   {
     id: 3,
     title: "Home Office Setup Guide 2026",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-2.jpg",
     category: "Home Office",
     date: "May 14, 2026",
     readTime: "5 min read",
@@ -29,7 +29,7 @@ export const blogPosts = [
   {
     id: 4,
     title: "Bedroom Colour Palettes That Help You Sleep",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-3.jpg",
     category: "Bedroom",
     date: "April 30, 2026",
     readTime: "3 min read",
@@ -38,7 +38,7 @@ export const blogPosts = [
   {
     id: 5,
     title: "Dining Tables: Round vs Rectangular",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-4.jpg",
     category: "Dining Room",
     date: "April 12, 2026",
     readTime: "4 min read",
@@ -47,7 +47,7 @@ export const blogPosts = [
   {
     id: 6,
     title: "Outdoor Living: Extend Your Space",
-    image: "/images/blog/blog-1.jpg",
+    image: "/images/blog/blog-5.jpg",
     category: "Outdoor",
     date: "March 25, 2026",
     readTime: "5 min read",
