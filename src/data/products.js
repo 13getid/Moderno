@@ -8,15 +8,15 @@ export const newArrivals = [
 
 export const allProducts = [
   // Living Room
-  { id: 1, name: "Luna 3-Seater Sofa", price: 120000, category: "Living Room", image: "/images/products/sofa.jpg", badge: "Best Seller" },
+  { id: 1, name: "Luna 3-Seater Sofa", price: 120000, category: "Living Room", image: "/images/products/sofa.jpg", badge: "Best Seller", rating: 4.9 },
   { id: 2, name: "Nova Coffee Table", price: 35000, category: "Living Room", image: "/images/products/coffee-table.jpg" },
-  { id: 3, name: "Elle Accent Chair", price: 45000, category: "Living Room", image: "/images/products/accent-chair.jpg" },
+  { id: 3, name: "Elle Accent Chair", price: 45000, category: "Living Room", image: "/images/products/accent-chair.jpg", badge: "New Arrival", rating: 4.7 },
   { id: 4, name: "Haven Sideboard", price: 75000, category: "Living Room", image: "/images/products/sideboard.jpg" },
-  { id: 5, name: "Woven Pendant Light", price: 15000, category: "Decor", image: "/images/products/pendant-light.jpg" },
+  { id: 5, name: "Woven Pendant Light", price: 15000, category: "Decor", image: "/images/products/pendant-light.jpg", rating: 4.8 },
   // Bedroom
-  { id: 6, name: "Drift Bed Frame", price: 95000, category: "Bedroom", image: "/images/products/bed-frame.jpg" },
-  { id: 7, name: "Linen Bedside Table", price: 22000, category: "Bedroom", image: "/images/products/bedside-table.jpg" },
-  { id: 8, name: "Arch Floor Lamp", price: 25000, category: "Bedroom", image: "/images/products/floor-lamp.jpg" },
+  { id: 6, name: "Drift Bed Frame", price: 95000, category: "Bedroom", image: "/images/products/bed-frame.jpg", rating: 4.6 },
+  { id: 7, name: "Linen Bedside Table", price: 22000, category: "Bedroom", image: "/images/products/bedside-table.jpg", rating: 4.5 },
+  { id: 8, name: "Arch Floor Lamp", price: 25000, category: "Bedroom", image: "/images/products/floor-lamp.jpg", rating: 4.7 },
   // Dining Room
   { id: 9, name: "Oak Dining Table", price: 140000, category: "Dining Room", image: "/images/products/dining-table.jpg", badge: "Popular" },
   { id: 10, name: "Rattan Dining Chair", price: 28000, category: "Dining Room", image: "/images/products/dining-chair.jpg" },
