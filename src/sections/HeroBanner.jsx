@@ -10,6 +10,10 @@ import hero5 from '../assets/images/hero5.jpg'
 import hero6 from '../assets/images/hero6.jpg'
 import hero7 from '../assets/images/hero7.jpg'
 import hero8 from '../assets/images/hero8.jpg'
+import hero9 from '../assets/images/hero9.jpg'
+import hero10 from '../assets/images/hero10.jpg'
+import hero11 from '../assets/images/hero11.jpg'
+
 
 const slides = [
   {
@@ -33,6 +37,30 @@ const slides = [
     body: "Ergonomic desks and chairs that make your workspace as inspiring as your ideas.",
     image: hero7,
   },
+
+// 2. Add these objects to your data array:
+  {
+    id: 3,
+    eyebrow: "THE HEART OF THE HOME.",
+    headline: ["Culinary Spaces", "Modern Design", "Smart Storage"],
+    body: "Minimalist cabinetry and sleek countertops that turn everyday cooking into an experience.",
+    image: hero10,
+  },
+  {
+    id: 4,
+    eyebrow: "LOUNGE WITHOUT BOUNDARIES.",
+    headline: ["Open Skies", "Pure Comfort", "Weather Proof"],
+    body: "Durable luxury sofas and dining sets engineered to blend seamlessly with your landscape.",
+    image: hero11, // Replace with your actual imported image variable
+  },
+  {
+    id: 5,
+    eyebrow: "YOUR PRIVATE SANCTUARY.",
+    headline: ["Clean Lines", "Calming Tones", "Spa Quality"],
+    body: "Elegant vanities and matte fixtures designed to turn your bathroom into a personal retreat.",
+    image: hero9, 
+  },
+
 ]
 
 export default function HeroBanner() {
