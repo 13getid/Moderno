@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
       <p className="text-xs text-stone-500 mb-0.5">{product.category}</p>
       <p className="text-sm text-stone-800 font-medium">{product.name}</p>
       <p className="text-sm font-semibold text-stone-900 mt-0.5">
-        ${product.price.toFixed(2)}
+        {formatKES(product.price)}
       </p>
 
     </div>

@@ -6,9 +6,12 @@ import { formatKES } from '../utils/currency'
 export default function Cart() {
   const { cartItems, updateQty, removeFromCart, cartCount } = useCart()
 
-  // Total price of all items
+  // 1. Calculations optimized for KSh with a nominal token shipping rate
   const subtotal = cartItems.reduce((sum, i) => sum + i.price * i.qty, 0)
-  const shipping = subtotal >= 100 ? 0 : 15
+  const shippingThreshold = 10000; // Free shipping threshold remains KSh 10,000
+  const shippingFee = 49;         // Reduced to a nominal KSh 49 to remove checkout hesitation entirely
+  
+  const shipping = subtotal >= shippingThreshold ? 0 : shippingFee
   const total    = subtotal + shipping
 
   if (cartCount === 0) {
@@ -51,7 +54,7 @@ export default function Cart() {
                 <div className="flex-1">
                   <p className="text-xs text-stone-400 mb-0.5">{item.category}</p>
                   <p className="font-medium text-stone-900">{item.name}</p>
-                  <p className="text-sm font-semibold text-stone-700 mt-1">${item.price.toFixed(2)}</p>
+                  <p className="text-sm font-semibold text-stone-700 mt-1">{formatKES(item.price)}</p>
                 </div>
 
                 {/* Qty controls */}
@@ -72,8 +75,8 @@ export default function Cart() {
                 </div>
 
                 {/* Line total */}
-                <p className="w-20 text-right font-semibold text-stone-900 text-sm">
-                  ${(item.price * item.qty).toFixed(2)}
+                <p className="w-24 text-right font-semibold text-stone-900 text-sm">
+                  {formatKES(item.price * item.qty)}
                 </p>
 
                 {/* Remove */}
@@ -93,24 +96,27 @@ export default function Cart() {
             <div className="space-y-3 text-sm text-stone-600 mb-6">
               <div className="flex justify-between">
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>{formatKES(subtotal)}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span className={shipping === 0 ? 'text-green-600' : ''}>
-                  {shipping === 0 ? 'FREE' : `$${shipping}`}
+                <span className={shipping === 0 ? 'text-green-600 font-medium' : ''}>
+                  {shipping === 0 ? 'FREE' : formatKES(shipping)}
                 </span>
               </div>
               <div className="border-t border-stone-100 pt-3 flex justify-between font-semibold text-stone-900">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>{formatKES(total)}</span>
               </div>
             </div>
+            
+            {/* Dynamic free shipping progress prompt */}
             {shipping > 0 && (
-              <p className="text-xs text-[#8B6C42] mb-4">
-                Add ${(100 - subtotal).toFixed(2)} more for free shipping!
+              <p className="text-xs text-[#8B6C42] mb-4 bg-stone-50 p-2.5 rounded border border-stone-100">
+                Add <span className="font-semibold">{formatKES(shippingThreshold - subtotal)}</span> more for free shipping!
               </p>
             )}
+            
             <button className="w-full bg-stone-900 text-white py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors">
               PROCEED TO CHECKOUT
             </button>
