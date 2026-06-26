@@ -329,7 +329,7 @@ export default function AuthPage({ initialMode = 'login' }) {
 
             <p className="text-sm text-white/60 leading-relaxed max-w-[290px] mb-7">
               Curated furniture for homes that deserve more than ordinary.
-              Free delivery over KSh 10,000.
+              Free delivery over KSh 100,000.
             </p>
 
             <div className="flex gap-8">
