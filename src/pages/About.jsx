@@ -30,7 +30,7 @@ const team = [
      image: "/images/about/team-3.jpg" },
 
   { name: "Momanyi Kelvin",  
-     role: "Systems Administrator",     
+     role: "System Administrator",     
      image: "/images/about/team-4.jpg" },   
 ]
 

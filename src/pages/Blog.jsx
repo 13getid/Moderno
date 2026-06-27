@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { blogPosts } from '../data/blogPosts'
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-// All unique categories from posts
 const allCats = ["All", ...new Set(blogPosts.map((p) => p.category))]
 
 export default function Blog() {
@@ -17,8 +17,12 @@ export default function Blog() {
 
       {/* Header */}
       <section className="bg-[#EDE8DF] dark:bg-ink-light py-20 text-center px-6">
-        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-3">The Moderno Journal</p>
-        <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">Ideas for Your Home</h1>
+        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-3">
+          The Moderno Journal
+        </p>
+        <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">
+          Ideas for Your Home
+        </h1>
         <p className="text-sm text-stone-500 dark:text-stone-400 max-w-md mx-auto">
           Design tips, style guides, and stories from the world of home decor.
         </p>
@@ -46,15 +50,19 @@ export default function Blog() {
         {/* Post grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((post) => (
-            <article
+
+            /* ✅ Whole card is now a Link — clicking anywhere navigates */
+            <Link
               key={post.id}
-              className="bg-white dark:bg-ink-light rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer group"
+              to={`/blog/${post.id}`}
+              className="bg-white dark:bg-ink-light rounded-lg overflow-hidden hover:shadow-md transition-shadow cursor-pointer group block"
             >
-              {/* Thumbnail Container — Now rendering your /public folder image */}
+              {/* Thumbnail */}
               <div className="h-48 overflow-hidden bg-[#F0E8D8] dark:bg-ink-light relative">
-                <img 
-                  src={post.image} 
+                <img
+                  src={post.image}
                   alt={post.title}
+                  onError={(e) => { e.target.src = '/images/placeholder.jpg' }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
@@ -67,18 +75,26 @@ export default function Blog() {
                   </span>
                   <span className="text-xs text-stone-400">{post.readTime}</span>
                 </div>
+
                 <h2 className="font-semibold text-stone-900 dark:text-stone-100 mb-2 leading-snug group-hover:text-[#8B6C42] transition-colors">
                   {post.title}
                 </h2>
-                <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed mb-4">{post.excerpt}</p>
+
+                <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed mb-4">
+                  {post.excerpt}
+                </p>
+
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-stone-400">{post.date}</span>
-                  <span className="flex items-center gap-1 text-xs text-[#8B6C42] font-medium">
+
+                  {/* ✅ Read button — styled as link, already inside the Link card */}
+                  <span className="flex items-center gap-1 text-xs text-[#8B6C42] font-medium group-hover:underline">
                     Read <ArrowRight size={12} />
                   </span>
                 </div>
               </div>
-            </article>
+
+            </Link>
           ))}
         </div>
       </div>
