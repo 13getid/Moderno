@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { allProducts, categoryList, priceRanges } from '../data/products'
 import ProductCard from '../components/ProductCard'
+import { useSearchParams } from 'react-router-dom'
 
 // Sort options shown in the dropdown
 const sortOptions = [
@@ -12,6 +13,10 @@ const sortOptions = [
 ]
 
 export default function Shop() {
+  // Read active search terms out of the window URL parameters (?search=...)
+  const [searchParams] = useSearchParams()
+  const urlSearch = searchParams.get('search') || ''
+
   // Which categories are ticked — starts empty = show all
   const [selectedCats, setSelectedCats] = useState([])
   // Which price range is selected
@@ -28,29 +33,36 @@ export default function Shop() {
     )
   }
 
-  // useMemo: only recalculate when filters or sort change
-  // Like a smart calculator that only recalculates when numbers change
+  // useMemo: recalculates when filters, sort criteria, or URL keyword changes
   const filtered = useMemo(() => {
     let result = [...allProducts]
 
-    // Filter by category
+    // 1. Filter by live URL Search Text (Matching against Name or Category keys)
+    if (urlSearch) {
+      result = result.filter((p) =>
+        p.name.toLowerCase().includes(urlSearch.toLowerCase()) ||
+        p.category.toLowerCase().includes(urlSearch.toLowerCase())
+      )
+    }
+
+    // 2. Filter by category checkboxes
     if (selectedCats.length > 0) {
       result = result.filter((p) => selectedCats.includes(p.category))
     }
 
-    // Filter by price range
+    // 3. Filter by price range radio selections
     if (selectedPrice !== null) {
       const range = priceRanges[selectedPrice]
       result = result.filter((p) => p.price >= range.min && p.price < range.max)
     }
 
-    // Sort
+    // 4. Sort calculations
     if (sort === "price-asc")  result.sort((a, b) => a.price - b.price)
     if (sort === "price-desc") result.sort((a, b) => b.price - a.price)
     if (sort === "name-asc")   result.sort((a, b) => a.name.localeCompare(b.name))
 
     return result
-  }, [selectedCats, selectedPrice, sort])
+  }, [selectedCats, selectedPrice, sort, urlSearch]) // Added urlSearch dependency tracking
 
   return (
     <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
@@ -58,7 +70,10 @@ export default function Shop() {
       {/* Page header */}
       <div className="max-w-7xl mx-auto px-6 pt-10 pb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-100">All Products</h1>
+          {/* Dynamic header title switching on active search queries */}
+          <h1 className="text-2xl font-bold text-stone-900 dark:text-stone-100">
+            {urlSearch ? `Results for "${urlSearch}"` : 'All Products'}
+          </h1>
           <p className="text-sm text-stone-500 dark:text-stone-400 mt-1">{filtered.length} products</p>
         </div>
 

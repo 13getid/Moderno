@@ -3,6 +3,7 @@ import { Home, ShoppingBag, Info, Newspaper, Mail, Search, ShoppingCart, X, Sun,
 import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useTheme } from '../context/ThemeContext'
+import SearchOverlay from './SearchOverlay'
 
 const navLinks = [
   { label: 'Home',     path: '/',        icon: Home },
@@ -16,6 +17,7 @@ export default function Navbar() {
   const { cartCount } = useCart()
   const { theme, toggleTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [showSearch, setShowSearch] = useState(false) // Connected search state
   const navigate = useNavigate()
   const isDark = theme === 'dark'
 
@@ -90,11 +92,13 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-0.5 shrink-0 ml-auto md:ml-0 pr-1">
+            {/* Desktop Search Button */}
             <button
               type="button"
               title="Search"
               aria-label="Search"
-              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+              onClick={() => setShowSearch(true)}
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors" 
             >
               <Search size={17} strokeWidth={1.5} aria-hidden="true" />
             </button>
@@ -170,7 +174,17 @@ export default function Navbar() {
             onClick={() => setMenuOpen(false)}
             className="self-end mb-5 text-stone-400 hover:text-brown-light transition-colors"
           >
-            <X size={24} />
+            <X size={18} />
+          </button>
+
+          {/* Mobile Drawer Search Button */}
+          <button
+            type="button"
+            onClick={() => { setMenuOpen(false); setShowSearch(true) }}
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            <Search size={18} strokeWidth={1.5} />
+            <span className="text-[13px] tracking-[0.1em] uppercase">Search</span>
           </button>
 
           {navLinks.map(({ label, path, icon: Icon }) => (
@@ -180,53 +194,22 @@ export default function Navbar() {
               end={path === '/'}
               onClick={() => setMenuOpen(false)}
               className={({ isActive }) =>
-                `flex items-center gap-3.5 px-3 py-3 rounded-xl no-underline transition-colors ${
-                  isActive ? 'bg-brown/10 text-brown-light' : 'text-stone-400 hover:bg-brown/10 hover:text-brown-light'
+                `flex items-center gap-3.5 px-3 py-3 rounded-xl transition-colors no-underline ${
+                  isActive ? 'bg-brown text-white' : 'text-stone-400 hover:bg-white/[0.04] hover:text-stone-200'
                 }`
               }
             >
-              <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
-              <span className="text-[13px] tracking-[0.1em] uppercase">{label}</span>
+              <Icon size={18} strokeWidth={1.5} />
+              <span className="text-[13px] tracking-[0.1em] uppercase font-medium">{label}</span>
             </NavLink>
           ))}
-
-          <div className="h-px my-2.5 bg-brown/35" />
-
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); navigate('/login') }}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            <User size={18} strokeWidth={1.5} aria-hidden="true" />
-            <span className="text-[13px] tracking-[0.1em] uppercase">Sign In</span>
-          </button>
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            {isDark
-              ? <Sun size={18} strokeWidth={1.5} aria-hidden="true" />
-              : <Moon size={18} strokeWidth={1.5} aria-hidden="true" />}
-            <span className="text-[13px] tracking-[0.1em] uppercase">{isDark ? 'Light mode' : 'Dark mode'}</span>
-          </button>
-          <button
-            type="button"
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            <Search size={18} strokeWidth={1.5} aria-hidden="true" />
-            <span className="text-[13px] tracking-[0.1em] uppercase">Search</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); navigate('/cart') }}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            <ShoppingCart size={18} strokeWidth={1.5} aria-hidden="true" />
-            <span className="text-[13px] tracking-[0.1em] uppercase">Cart{cartCount > 0 ? ` (${cartCount})` : ''}</span>
-          </button>
         </div>
       </div>
+
+      {/* ─── SEARCH OVERLAY ─── */}
+      {showSearch && (
+        <SearchOverlay onClose={() => setShowSearch(false)} />
+      )}
     </>
   )
 }
