@@ -1,47 +1,79 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { CartProvider } from './context/CartContext'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { CartProvider }  from './context/CartContext'
 import { ThemeProvider } from './context/ThemeContext'
-import Navbar from './components/Navbar'
-import Home from './pages/Home'
-import Shop from './pages/Shop'
+import { AuthProvider, useAuth } from './context/AuthContext'
+import Navbar    from './components/Navbar'
+import Footer    from './components/Footer'
+import Home      from './pages/Home'
+import Shop      from './pages/Shop'
+import About     from './pages/About'
+import Blog      from './pages/Blog'
+import BlogPost  from './pages/BlogPost'
+import Contact   from './pages/Contact'
+import Cart      from './pages/Cart'
 import Dashboard from './pages/Dashboard'
-import About from './pages/About'
-import Blog from './pages/Blog'
-import BlogPost from './pages/BlogPost'
-import Contact from './pages/Contact'
-import Cart from './pages/Cart'
-import AuthPage from './pages/AuthPage'
-import Footer from './components/Footer'
+import Login     from './pages/Login'
+import Register  from './pages/Register'
+
+// PrivateRoute: if user is NOT logged in, send them to /login
+// If they ARE logged in, show the page normally
+// Like a bouncer at a VIP section
+function PrivateRoute({ children }) {
+  const { user } = useAuth()
+  return user ? children : <Navigate to="/login" replace />
+}
+
+// AdminRoute: only users with role="admin" can enter
+function AdminRoute({ children }) {
+  const { user } = useAuth()
+  if (!user) return <Navigate to="/login" replace />
+  if (user.role !== 'admin') return <Navigate to="/" replace />
+  return children
+}
+
+function AppLayout() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className="flex-1">
+        <Routes>
+          {/* Public routes — anyone can visit */}
+          <Route path="/"         element={<Home />} />
+          <Route path="/shop"     element={<Shop />} />
+          <Route path="/about"    element={<About />} />
+          <Route path="/blog"     element={<Blog />} />
+          <Route path="/blog/:id" element={<BlogPost />} />
+          <Route path="/contact"  element={<Contact />} />
+          <Route path="/login"    element={<Login />} />
+          <Route path="/register" element={<Register />} />
+
+          {/* Private routes — must be logged in */}
+          <Route path="/cart" element={
+            <PrivateRoute><Cart /></PrivateRoute>
+          } />
+
+          {/* Admin route — must be logged in AND be admin */}
+          <Route path="/dashboard" element={
+            <AdminRoute><Dashboard /></AdminRoute>
+          } />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
+  )
+}
 
 export default function App() {
   return (
-    <ThemeProvider>
-    <CartProvider>
-      <BrowserRouter>
-        <div className="min-h-screen bg-cream dark:bg-ink text-stone-900 dark:text-stone-100 transition-colors duration-300">
-        <Navbar />
-
-        <Routes>
-          <Route path="/"           element={<Home />} />
-          <Route path="/shop"       element={<Shop />} />
-          <Route path="/dashboard"  element={<Dashboard />} />
-          <Route path="/about"      element={<About />} />
-          <Route path="/blog"       element={<Blog />} />
-          <Route path="/blog/:id"   element={<BlogPost />} />
-          <Route path="/contact"    element={<Contact />} />
-          <Route path="/cart"       element={<Cart />} />
-          {/* Two routes share ONE component — initialMode just picks the first tab */}
-          <Route path="/login"      element={<AuthPage initialMode="login" />} />
-          <Route path="/register"   element={<AuthPage initialMode="register" />} />
-
-          {/* Catch-all route to instantly reveal broken links */}
-          <Route path="*" element={<div className="p-20 text-center text-red-500 font-bold">Error 404: The URL "{window.location.pathname}" does not exist.</div>} />
-        </Routes>
-        
-        <Footer />
-        </div>
-      </BrowserRouter>
-    </CartProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+    {/* Order matters: BrowserRouter → ThemeProvider → AuthProvider → CartProvider */}
+      <ThemeProvider>
+        <AuthProvider>
+          <CartProvider>
+            <AppLayout />
+          </CartProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   )
 }

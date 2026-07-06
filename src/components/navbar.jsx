@@ -1,8 +1,9 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { Home, ShoppingBag, Info, Newspaper, Mail, Search, ShoppingCart, X, Sun, Moon, User } from 'lucide-react'
+import { Home, ShoppingBag, Info, Newspaper, Mail, Search, ShoppingCart, X, Sun, Moon, User, LogOut } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useCart } from '../context/CartContext'
 import { useTheme } from '../context/ThemeContext'
+import { useAuth } from '../context/AuthContext'
 import SearchOverlay from './SearchOverlay'
 
 const navLinks = [
@@ -14,14 +15,15 @@ const navLinks = [
 ]
 
 export default function Navbar() {
-  const { cartCount } = useCart()
+  const { user, logoutUser }   = useAuth()
+  const { cartCount }          = useCart()
   const { theme, toggleTheme } = useTheme()
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [showSearch, setShowSearch] = useState(false) // Connected search state
+  const [menuOpen, setMenuOpen]     = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
   const navigate = useNavigate()
   const isDark = theme === 'dark'
 
-  // Close drawer on Escape + lock body scroll while it's open
+  // Close drawer on Escape + lock body scroll while open
   useEffect(() => {
     if (!menuOpen) return
     const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false) }
@@ -56,7 +58,7 @@ export default function Navbar() {
             <span aria-hidden="true" className="absolute right-0 top-[10%] h-[80%] w-px bg-gradient-to-b from-transparent via-brown to-transparent" />
           </Link>
 
-          {/* Desktop links */}
+          {/* Desktop nav links */}
           <div className="hidden md:flex flex-1 items-center justify-center px-1">
             {navLinks.map(({ label, path, icon: Icon }) => (
               <NavLink
@@ -73,9 +75,7 @@ export default function Navbar() {
                       aria-hidden="true"
                       className={`transition-colors ${isActive ? 'text-brown-light' : 'text-stone-400 group-hover:text-brown-light'}`}
                     />
-                    <span
-                      className={`text-[9px] font-medium tracking-[0.12em] uppercase whitespace-nowrap transition-colors ${isActive ? 'text-brown-light' : 'text-stone-400 group-hover:text-brown-light'}`}
-                    >
+                    <span className={`text-[9px] font-medium tracking-[0.12em] uppercase whitespace-nowrap transition-colors ${isActive ? 'text-brown-light' : 'text-stone-400 group-hover:text-brown-light'}`}>
                       {label}
                     </span>
                     {isActive && (
@@ -92,27 +92,47 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div className="flex items-center gap-0.5 shrink-0 ml-auto md:ml-0 pr-1">
-            {/* Desktop Search Button */}
+
+            {/* Search */}
             <button
               type="button"
               title="Search"
               aria-label="Search"
               onClick={() => setShowSearch(true)}
-              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors" 
+              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
             >
               <Search size={17} strokeWidth={1.5} aria-hidden="true" />
             </button>
 
-            <button
-              type="button"
-              title="Account"
-              aria-label="Account"
-              onClick={() => navigate('/login')}
-              className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
-            >
-              <User size={17} strokeWidth={1.5} aria-hidden="true" />
-            </button>
+            {/* Account — shows name + logout when logged in, sign-in icon when not */}
+            {user ? (
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-stone-300 tracking-wide hidden lg:block">
+                  Hi, {user.name.split(' ')[0]}
+                </span>
+                <button
+                  type="button"
+                  title="Sign out"
+                  aria-label="Sign out"
+                  onClick={() => { logoutUser(); navigate('/') }}
+                  className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+                >
+                  <LogOut size={17} strokeWidth={1.5} aria-hidden="true" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                title="Sign in"
+                aria-label="Sign in"
+                onClick={() => navigate('/login')}
+                className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
+              >
+                <User size={17} strokeWidth={1.5} aria-hidden="true" />
+              </button>
+            )}
 
+            {/* Dark / Light mode */}
             <button
               type="button"
               title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -121,10 +141,11 @@ export default function Navbar() {
               className="flex items-center justify-center w-[38px] h-[38px] rounded-full text-stone-200 hover:bg-white/[0.07] transition-colors"
             >
               {isDark
-                ? <Sun size={17} strokeWidth={1.5} aria-hidden="true" />
+                ? <Sun  size={17} strokeWidth={1.5} aria-hidden="true" />
                 : <Moon size={17} strokeWidth={1.5} aria-hidden="true" />}
             </button>
 
+            {/* Cart */}
             <button
               type="button"
               title="Cart"
@@ -152,8 +173,8 @@ export default function Navbar() {
               <span className="block w-[18px] h-px bg-stone-200 rounded" />
               <span className="block w-[18px] h-px bg-stone-200 rounded" />
             </button>
-          </div>
 
+          </div>
         </div>
       </nav>
 
@@ -165,9 +186,9 @@ export default function Navbar() {
           className={`absolute inset-0 bg-black/55 transition-opacity duration-300 ${menuOpen ? 'opacity-100' : 'opacity-0'}`}
         />
         {/* Panel */}
-        <div
-          className={`absolute right-0 top-0 bottom-0 w-[260px] bg-stone-900 border-l border-brown/35 px-5 py-7 flex flex-col gap-1 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-        >
+        <div className={`absolute right-0 top-0 bottom-0 w-[260px] bg-stone-900 border-l border-brown/35 px-5 py-7 flex flex-col gap-1 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+
+          {/* Close */}
           <button
             type="button"
             aria-label="Close menu"
@@ -177,7 +198,7 @@ export default function Navbar() {
             <X size={18} />
           </button>
 
-          {/* Mobile Drawer Search Button */}
+          {/* Search */}
           <button
             type="button"
             onClick={() => { setMenuOpen(false); setShowSearch(true) }}
@@ -187,6 +208,7 @@ export default function Navbar() {
             <span className="text-[13px] tracking-[0.1em] uppercase">Search</span>
           </button>
 
+          {/* Nav links */}
           {navLinks.map(({ label, path, icon: Icon }) => (
             <NavLink
               key={label}
@@ -203,6 +225,58 @@ export default function Navbar() {
               <span className="text-[13px] tracking-[0.1em] uppercase font-medium">{label}</span>
             </NavLink>
           ))}
+
+          <div className="h-px my-2 bg-brown/25" />
+
+          {/* Account — dynamic based on login state */}
+          {user ? (
+            <button
+              type="button"
+              onClick={() => { logoutUser(); setMenuOpen(false); navigate('/') }}
+              className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+            >
+              <LogOut size={18} strokeWidth={1.5} />
+              <span className="text-[13px] tracking-[0.1em] uppercase">
+                Sign Out ({user.name.split(' ')[0]})
+              </span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => { setMenuOpen(false); navigate('/login') }}
+              className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+            >
+              <User size={18} strokeWidth={1.5} />
+              <span className="text-[13px] tracking-[0.1em] uppercase">Sign In</span>
+            </button>
+          )}
+
+          {/* Dark / Light mode */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            {isDark
+              ? <Sun  size={18} strokeWidth={1.5} />
+              : <Moon size={18} strokeWidth={1.5} />}
+            <span className="text-[13px] tracking-[0.1em] uppercase">
+              {isDark ? 'Light Mode' : 'Dark Mode'}
+            </span>
+          </button>
+
+          {/* Cart */}
+          <button
+            type="button"
+            onClick={() => { setMenuOpen(false); navigate('/cart') }}
+            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+          >
+            <ShoppingCart size={18} strokeWidth={1.5} />
+            <span className="text-[13px] tracking-[0.1em] uppercase">
+              Cart{cartCount > 0 ? ` (${cartCount})` : ''}
+            </span>
+          </button>
+
         </div>
       </div>
 
