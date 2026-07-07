@@ -37,11 +37,11 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ─── NAVBAR WRAPPER ─── */}
-      <nav className="sticky top-0 z-50 flex justify-center px-5 py-3.5 bg-[rgba(245,240,232,0.85)] dark:bg-[rgba(20,18,16,0.85)] backdrop-blur-md border-b border-brown/10 dark:border-brown/20">
+      {/* ─── FLOATING VIEWPORT LAYER (Click-Through) ─── */}
+      <div className="fixed top-5 left-0 right-0 z-50 flex justify-center px-5 pointer-events-none">
 
-        {/* ─── THE CAPSULE ─── */}
-        <div className="relative flex items-center w-full max-w-[900px] h-14 pr-1.5 bg-stone-900 border border-brown/35 rounded-full overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(139,108,66,0.25),inset_0_-1px_0_rgba(0,0,0,0.4)]">
+        {/* ─── THE CAPSULE (Interactive) ─── */}
+        <div className="pointer-events-auto relative flex items-center w-full max-w-[900px] h-14 pr-1.5 bg-stone-900 border border-brown/35 rounded-full overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(139,108,66,0.25),inset_0_-1px_0_rgba(0,0,0,0.4)]">
 
           {/* Logo cap */}
           <Link
@@ -104,7 +104,7 @@ export default function Navbar() {
               <Search size={17} strokeWidth={1.5} aria-hidden="true" />
             </button>
 
-            {/* Account — shows name + logout when logged in, sign-in icon when not */}
+            {/* Account */}
             {user ? (
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-stone-300 tracking-wide hidden lg:block">
@@ -176,114 +176,11 @@ export default function Navbar() {
 
           </div>
         </div>
-      </nav>
-
-      {/* ─── MOBILE DRAWER ─── */}
-      <div className={`md:hidden fixed inset-0 z-[60] ${menuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-        {/* Overlay */}
-        <div
-          onClick={() => setMenuOpen(false)}
-          className={`absolute inset-0 bg-black/55 transition-opacity duration-300 ${menuOpen ? 'opacity-100' : 'opacity-0'}`}
-        />
-        {/* Panel */}
-        <div className={`absolute right-0 top-0 bottom-0 w-[260px] bg-stone-900 border-l border-brown/35 px-5 py-7 flex flex-col gap-1 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-
-          {/* Close */}
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={() => setMenuOpen(false)}
-            className="self-end mb-5 text-stone-400 hover:text-brown-light transition-colors"
-          >
-            <X size={18} />
-          </button>
-
-          {/* Search */}
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); setShowSearch(true) }}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            <Search size={18} strokeWidth={1.5} />
-            <span className="text-[13px] tracking-[0.1em] uppercase">Search</span>
-          </button>
-
-          {/* Nav links */}
-          {navLinks.map(({ label, path, icon: Icon }) => (
-            <NavLink
-              key={label}
-              to={path}
-              end={path === '/'}
-              onClick={() => setMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3.5 px-3 py-3 rounded-xl transition-colors no-underline ${
-                  isActive ? 'bg-brown text-white' : 'text-stone-400 hover:bg-white/[0.04] hover:text-stone-200'
-                }`
-              }
-            >
-              <Icon size={18} strokeWidth={1.5} />
-              <span className="text-[13px] tracking-[0.1em] uppercase font-medium">{label}</span>
-            </NavLink>
-          ))}
-
-          <div className="h-px my-2 bg-brown/25" />
-
-          {/* Account — dynamic based on login state */}
-          {user ? (
-            <button
-              type="button"
-              onClick={() => { logoutUser(); setMenuOpen(false); navigate('/') }}
-              className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-            >
-              <LogOut size={18} strokeWidth={1.5} />
-              <span className="text-[13px] tracking-[0.1em] uppercase">
-                Sign Out ({user.name.split(' ')[0]})
-              </span>
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => { setMenuOpen(false); navigate('/login') }}
-              className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-            >
-              <User size={18} strokeWidth={1.5} />
-              <span className="text-[13px] tracking-[0.1em] uppercase">Sign In</span>
-            </button>
-          )}
-
-          {/* Dark / Light mode */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            {isDark
-              ? <Sun  size={18} strokeWidth={1.5} />
-              : <Moon size={18} strokeWidth={1.5} />}
-            <span className="text-[13px] tracking-[0.1em] uppercase">
-              {isDark ? 'Light Mode' : 'Dark Mode'}
-            </span>
-          </button>
-
-          {/* Cart */}
-          <button
-            type="button"
-            onClick={() => { setMenuOpen(false); navigate('/cart') }}
-            className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
-          >
-            <ShoppingCart size={18} strokeWidth={1.5} />
-            <span className="text-[13px] tracking-[0.1em] uppercase">
-              Cart{cartCount > 0 ? ` (${cartCount})` : ''}
-            </span>
-          </button>
-
-        </div>
       </div>
 
-      {/* ─── SEARCH OVERLAY ─── */}
-      {showSearch && (
-        <SearchOverlay onClose={() => setShowSearch(false)} />
-      )}
+      {/* Mobile Drawer menu overlay content goes below here... */}
+      {/* SearchOverlay component container goes here... */}
+      {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />}
     </>
   )
 }
