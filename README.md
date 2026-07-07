@@ -1,6 +1,6 @@
 # Moderno — Home Decor E-Commerce
 
-A modern, full-featured home decor e-commerce storefront built with **React 18**, **Tailwind CSS v3**, and **React Router v6**. Includes a customer-facing storefront, admin dashboard, blog with full article pages, live search, a multi-tier shipping cart, and dark mode.
+A modern, full-featured home decor e-commerce storefront built with **React 18**, **Tailwind CSS v3**, and **React Router v6**. Includes a customer-facing storefront, admin dashboard, blog with full article pages, live search, a multi-tier shipping cart, dark mode, and a new backend API for authentication, product management, and order processing.
 
 ---
 
@@ -17,6 +17,7 @@ A modern, full-featured home decor e-commerce storefront built with **React 18**
 | 📬 Contact | Form with success state |
 | 📊 Dashboard | Admin stats cards and recent orders table |
 | 🌙 Dark mode | Full site dark/light toggle via ThemeContext |
+| 🛠️ Backend API | Express + PostgreSQL auth, product CRUD, and order handling |
 
 ---
 
@@ -28,7 +29,52 @@ A modern, full-featured home decor e-commerce storefront built with **React 18**
 | React Router | v6 | Client-side routing |
 | Tailwind CSS | v3 | Utility-first styling |
 | Vite | Latest | Dev server and build tool |
+| Express | Latest | Backend API server |
+| PostgreSQL | Latest | Persistent data store |
 | Lucide React | Latest | Icon library |
+
+---
+
+## Backend API
+
+The project now includes a Node.js/Express backend with PostgreSQL-backed data for core commerce actions and it is still in  updation process for more features eventualy.
+
+### Included API Features
+- User registration, login, and profile lookup
+- Product listing, detail retrieval, and admin CRUD operations
+- Order creation, order history, and admin order status updates
+- JWT-based authentication and protected routes
+
+### Main Endpoints
+
+| Method | Route | Description |
+|---|---|---|
+| POST | /api/auth/register | Create a new user account |
+| POST | /api/auth/login | Sign in and receive a JWT |
+| GET | /api/auth/me | Get the authenticated user profile |
+| GET | /api/products | List products with optional search/filter/sort |
+| POST | /api/products | Create a product (admin only) |
+| PUT | /api/products/:id | Update a product (admin only) |
+| DELETE | /api/products/:id | Delete a product (admin only) |
+| POST | /api/orders | Create a new order |
+| GET | /api/orders/my | Get orders for the signed-in user |
+| GET | /api/orders | View all orders (admin only) |
+| PUT | /api/orders/:id/status | Update order status (admin only) |
+| GET | /api/health | Health check for the API |
+
+### Backend Environment Variables
+
+Create a `.env` file in the project root with values such as:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=moderno
+DB_USER=postgres
+DB_PASSWORD=your_password
+JWT_SECRET=your_jwt_secret
+PORT=5000
+```
 
 ---
 
@@ -104,6 +150,7 @@ moderno/
 
 - Node.js 18 or higher
 - npm 9 or higher
+- PostgreSQL running locally or remotely
 
 ### Installation
 
@@ -115,11 +162,15 @@ cd moderno
 # 2. Install dependencies
 npm install
 
-# 3. Start the dev server
+# 3. Configure environment variables
+# Create a .env file with your PostgreSQL and JWT settings
+
+# 4. Start the full app (frontend + backend)
 npm run dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+The backend API will be available at [http://localhost:5000/api/health](http://localhost:5000/api/health).
 
 ### Build for Production
 
@@ -246,11 +297,9 @@ If an image fails to load, all `<img>` tags fall back to `/images/placeholder.jp
 ## Recommended Free Image Sources
 
 - [Unsplash](https://unsplash.com) — search "sofa", "dining table", "bedroom interior"
-- [Pexels](https://pexels.com) — free for commercial use, no attribution required
--[Pintrest](https://pintrest.com)
+- [Pexels](https://pexels.com) — free for commercial use, no attribution required.
+-[Pintrest](https://pintrest.com) - for ideas and overally images also.
 
 ---
 
 *Built for the Kenyan home decor market.*
-
-
