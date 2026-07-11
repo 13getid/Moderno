@@ -1,5 +1,6 @@
-// Because of Vite's proxy in vite.config.js, we use /api/...
-// Vite automatically forwards all /api calls to Express on port 5000
+// Use VITE_API_URL in production (Vercel → Render)
+// Falls back to /api locally (Vite proxy → Express)
+const BASE = import.meta.env.VITE_API_URL || '/api'
 
 function getHeaders() {
   const token = localStorage.getItem('moderno_token')
@@ -10,7 +11,7 @@ function getHeaders() {
 }
 
 async function request(path, options = {}) {
-  const res = await fetch(`/api${path}`, { headers: getHeaders(), ...options })
+  const res  = await fetch(`${BASE}${path}`, { headers: getHeaders(), ...options })
   const data = await res.json()
   if (!res.ok) throw new Error(data.error || 'Request failed')
   return data
@@ -46,7 +47,7 @@ export const apiPlaceOrder = (items, address) =>
     body: JSON.stringify({ items, address }),
   })
 
-export const apiGetMyOrders = () => request('/orders/my')
+export const apiGetMyOrders  = () => request('/orders/my')
 export const apiGetAllOrders = () => request('/orders')
 
 export const apiUpdateOrderStatus = (id, status) =>
@@ -54,3 +55,6 @@ export const apiUpdateOrderStatus = (id, status) =>
     method: 'PUT',
     body: JSON.stringify({ status }),
   })
+
+// ── Admin ─────────────────────────────────────────────
+export const apiGetAdminStats = () => request('/admin/stats')
