@@ -14,6 +14,7 @@ import Cart      from './pages/Cart'
 import Dashboard from './pages/Dashboard'
 import Login     from './pages/Login'
 import Register  from './pages/Register'
+import MyOrders  from './pages/MyOrders'
 
 // PrivateRoute: if user is NOT logged in, send them to /login
 // If they ARE logged in, show the page normally
@@ -50,6 +51,10 @@ function AppLayout() {
           {/* Private routes — must be logged in */}
           <Route path="/cart" element={
             <PrivateRoute><Cart /></PrivateRoute>
+          } />
+
+          <Route path="/my-orders" element={
+            <PrivateRoute><MyOrders /></PrivateRoute>
           } />
 
           {/* Admin route — must be logged in AND be admin */}

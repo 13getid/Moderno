@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext'
 import { useTheme } from '../context/ThemeContext'
 import { useAuth } from '../context/AuthContext'
 import SearchOverlay from './SearchOverlay'
+import { Package } from 'lucide-react'
 
 const navLinks = [
   { label: 'Home',     path: '/',        icon: Home },
@@ -179,6 +180,19 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Drawer menu overlay content goes below here... */}
+  
+      {user && (
+        <button
+          type="button"
+          onClick={() => { setMenuOpen(false); navigate('/my-orders') }}
+          className="flex items-center gap-3.5 px-3 py-3 rounded-xl text-stone-400 hover:bg-brown/10 hover:text-brown-light transition-colors"
+        >
+          <Package size={18} strokeWidth={1.5} />
+          <span className="text-[13px] tracking-[0.1em] uppercase">My Orders</span>
+        </button>
+      )}
+
+  
       {/* SearchOverlay component container goes here... */}
       {showSearch && <SearchOverlay onClose={() => setShowSearch(false)} />}
     </>

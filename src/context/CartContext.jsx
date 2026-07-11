@@ -23,10 +23,16 @@ export function CartProvider({ children }) {
     setCartItems((prev) => prev.filter((i) => i.id !== id))
   }
 
+  // 1. ADD THIS: Define the clearCart function to empty the array
+  function clearCart() {
+    setCartItems([])
+  }
+
   const cartCount = cartItems.reduce((sum, i) => sum + i.qty, 0)
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, updateQty, removeFromCart, cartCount }}>
+    // 2. UPDATE THIS: Pass clearCart into the value object 
+    <CartContext.Provider value={{ cartItems, addToCart, updateQty, removeFromCart, clearCart, cartCount }}>
       {children}
     </CartContext.Provider>
   )
