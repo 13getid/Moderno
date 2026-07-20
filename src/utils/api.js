@@ -1,6 +1,6 @@
-// Use VITE_API_URL in production (Vercel → Render)
-// Falls back to /api locally (Vite proxy → Express)
-const BASE = import.meta.env.VITE_API_URL || '/api'
+// Since Express serves React on the same domain in production,
+// /api always works — no full URL needed anywhere
+const BASE = '/api'
 
 function getHeaders() {
   const token = localStorage.getItem('moderno_token')
