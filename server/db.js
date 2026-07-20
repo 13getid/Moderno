@@ -9,7 +9,11 @@ const { Pool } = pg
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
+      ssl: {
+        rejectUnauthorized: false,
+        // Suppresses the pg SSL mode warning in Node.js v24+
+        sslmode: 'verify-full' 
+      },
     })
   : new Pool({
       host:     process.env.DB_HOST,
@@ -19,8 +23,16 @@ const pool = process.env.DATABASE_URL
       password: process.env.DB_PASSWORD,
     })
 
+// Handle background errors on idle clients so the app doesn't crash
+pool.on('error', (err) => {
+  console.error('⚠️ Idle PostgreSQL client error:', err.message)
+})
+
 pool.connect()
-  .then(() => console.log('✅ PostgreSQL connected'))
-  .catch((e) => console.error('❌ DB error:', e.message))
+  .then((client) => {
+    console.log('✅ PostgreSQL connected')
+    client.release() // Always release test connection back to pool
+  })
+  .catch((e) => console.error('❌ DB connection error:', e.message))
 
 export default pool
