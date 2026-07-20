@@ -1,116 +1,167 @@
 import { useState } from 'react'
-import { MapPin, Phone, Mail, Clock } from 'lucide-react'
-
-const contactInfo = [
-  { Icon: MapPin, label: "Address",  value: "14 Moi Avenue, Mombasa, Kenya" },
-  { Icon: Phone,  label: "Phone",    value: "+254 700 123 456" },
-  { Icon: Mail,   label: "Email",    value: "hello@moderno.co.ke" },
-  { Icon: Clock,  label: "Hours",    value: "Mon–Sat: 9am – 6pm" },
-]
+import { Mail, Phone, MapPin, Send, CheckCircle, Loader2 } from 'lucide-react'
+import { apiSendContact } from '../utils/api'
 
 export default function Contact() {
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-  const [submitted, setSubmitted] = useState(false)
+  const [form, setForm] = useState({
+    name: '', email: '', subject: '', message: ''
+  })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError]     = useState('')
 
-  // Update form state when user types
   function handleChange(e) {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  // Handle form submit
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    // In a real app you'd POST to an API here
-    setSubmitted(true)
+    setError('')
+    setLoading(true)
+    try {
+      await apiSendContact(form.name, form.email, form.subject, form.message)
+      setSuccess(true)
+      setForm({ name: '', email: '', subject: '', message: '' })
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="bg-[#F5F0E8] dark:bg-ink min-h-screen">
+    <div className="min-h-screen bg-[#F5F0E8] dark:bg-stone-950">
+      <div className="max-w-5xl mx-auto px-6 py-14">
 
-      {/* Header */}
-      <section className="bg-[#EDE8DF] dark:bg-ink-light py-20 text-center px-6">
-        <p className="text-xs tracking-[0.2em] uppercase text-stone-500 dark:text-stone-400 mb-3">Get In Touch</p>
-        <h1 className="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-4">We'd Love To Hear From You</h1>
-        <p className="text-sm text-stone-500 dark:text-stone-400 max-w-md mx-auto">
-          Questions, custom orders, or just want to say hello? Send us a message.
-        </p>
-      </section>
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <h1 className="font-['Cormorant_Garamond',serif] text-4xl font-semibold text-stone-900 dark:text-stone-100 mb-3">
+            Get in Touch
+          </h1>
+          <p className="text-stone-500 dark:text-stone-400 text-sm max-w-md mx-auto">
+            Have a question about a product or your order? We'd love to hear from you.
+          </p>
+        </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-5 gap-10">
 
-        {/* Left: contact details */}
-        <div>
-          <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-8">Contact Information</h2>
-          <div className="space-y-6 mb-10">
-            {contactInfo.map(({ Icon, label, value }) => (
+          {/* Left — contact info */}
+          <div className="md:col-span-2 space-y-6">
+            {[
+              { icon: Mail,    label: 'Email',   value: 'hello@moderno.co.ke' },
+              { icon: Phone,   label: 'Phone',   value: '+254 700 000 000'    },
+              { icon: MapPin,  label: 'Address', value: 'Westlands, Nairobi, Kenya' },
+            ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-[#F0E8D8] dark:bg-ink-light rounded-full flex items-center justify-center shrink-0">
+                <div className="w-10 h-10 rounded-full bg-[#8B6C42]/10 flex items-center justify-center shrink-0">
                   <Icon size={18} className="text-[#8B6C42]" />
                 </div>
                 <div>
-                  <p className="text-xs text-stone-400 mb-0.5">{label}</p>
-                  <p className="text-sm text-stone-800 dark:text-stone-100 font-medium">{value}</p>
+                  <p className="text-xs uppercase tracking-widest text-stone-400 mb-0.5">{label}</p>
+                  <p className="text-sm text-stone-700 dark:text-stone-300">{value}</p>
                 </div>
               </div>
             ))}
           </div>
-          {/* Map placeholder */}
-          <div className="bg-[#E0D8CC] dark:bg-ink-light rounded-lg h-48 flex items-center justify-center text-stone-500 dark:text-stone-400 text-sm">
-            🗺️ Map embed goes here
-          </div>
-        </div>
 
-        {/* Right: form */}
-        <div>
-          {submitted ? (
-            <div className="flex flex-col items-center justify-center h-full text-center py-16">
-              <div className="text-5xl mb-4">✅</div>
-              <h3 className="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-2">Message Sent!</h3>
-              <p className="text-sm text-stone-500 dark:text-stone-400">We'll get back to you within 24 hours.</p>
-              <button
-                onClick={() => { setSubmitted(false); setForm({ name:'', email:'', subject:'', message:'' }) }}
-                className="mt-6 text-sm text-[#8B6C42] underline"
-              >Send another message</button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-6">Send a Message</h2>
-              {[
-                { name:"name",    label:"Your Name",     type:"text" },
-                { name:"email",   label:"Email Address", type:"email" },
-                { name:"subject", label:"Subject",       type:"text" },
-              ].map((field) => (
-                <div key={field.name}>
-                  <label className="block text-xs text-stone-500 dark:text-stone-400 mb-1">{field.label}</label>
+          {/* Right — form */}
+          <div className="md:col-span-3">
+
+            {/* Success state */}
+            {success ? (
+              <div className="bg-white dark:bg-stone-900 rounded-2xl p-10 shadow-sm text-center">
+                <CheckCircle size={48} className="text-[#8B6C42] mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-stone-900 dark:text-stone-100 mb-2">
+                  Message Sent!
+                </h3>
+                <p className="text-stone-500 dark:text-stone-400 text-sm mb-6">
+                  Thank you for reaching out. We'll get back to you within 24 hours.
+                  Check your inbox — we've sent you a confirmation.
+                </p>
+                <button
+                  onClick={() => setSuccess(false)}
+                  className="text-sm text-[#8B6C42] hover:underline"
+                >
+                  Send another message
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white dark:bg-stone-900 rounded-2xl p-8 shadow-sm space-y-5">
+
+                {/* Name + Email row */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    { name: 'name',  label: 'Your Name',  type: 'text',  placeholder: 'Ian Otieno'          },
+                    { name: 'email', label: 'Email',      type: 'email', placeholder: 'ian@example.com'      },
+                  ].map(({ name, label, type, placeholder }) => (
+                    <div key={name}>
+                      <label className="block text-xs font-medium tracking-widest uppercase text-stone-500 dark:text-stone-400 mb-1.5">
+                        {label}
+                      </label>
+                      <input
+                        type={type}
+                        name={name}
+                        value={form[name]}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        required
+                        className="w-full px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B6C42]/40 focus:border-[#8B6C42] transition"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Subject */}
+                <div>
+                  <label className="block text-xs font-medium tracking-widest uppercase text-stone-500 dark:text-stone-400 mb-1.5">
+                    Subject
+                  </label>
                   <input
-                    type={field.type}
-                    name={field.name}
-                    value={form[field.name]}
+                    type="text"
+                    name="subject"
+                    value={form.subject}
                     onChange={handleChange}
-                    required
-                    className="w-full border border-stone-200 dark:border-stone-700 bg-white dark:bg-ink-light dark:text-stone-100 px-4 py-3 text-sm rounded focus:outline-none focus:border-[#8B6C42]"
+                    placeholder="e.g. Question about the Luna Sofa"
+                    className="w-full px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B6C42]/40 focus:border-[#8B6C42] transition"
                   />
                 </div>
-              ))}
-              <div>
-                <label className="block text-xs text-stone-500 dark:text-stone-400 mb-1">Message</label>
-                <textarea
-                  name="message"
-                  rows={5}
-                  value={form.message}
-                  onChange={handleChange}
-                  required
-                  className="w-full border border-stone-200 dark:border-stone-700 bg-white dark:bg-ink-light dark:text-stone-100 px-4 py-3 text-sm rounded focus:outline-none focus:border-[#8B6C42] resize-none"
-                />
+
+                {/* Message */}
+                <div>
+                  <label className="block text-xs font-medium tracking-widest uppercase text-stone-500 dark:text-stone-400 mb-1.5">
+                    Message
+                  </label>
+                  <textarea
+                    name="message"
+                    rows={5}
+                    value={form.message}
+                    onChange={handleChange}
+                    placeholder="Tell us how we can help..."
+                    required
+                    className="w-full px-4 py-2.5 rounded-lg border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#8B6C42]/40 focus:border-[#8B6C42] resize-none transition"
+                  />
+                </div>
+
+                {/* Error */}
+                {error && (
+                  <p className="text-sm text-red-500">{error}</p>
+                )}
+
+                {/* Submit */}
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="w-full py-3 bg-[#8B6C42] hover:bg-[#7A5C35] disabled:opacity-60 text-white text-sm font-medium tracking-widest uppercase rounded-xl transition flex items-center justify-center gap-2"
+                >
+                  {loading
+                    ? <><Loader2 size={15} className="animate-spin" /> Sending...</>
+                    : <><Send size={15} /> Send Message</>
+                  }
+                </button>
+
               </div>
-              <button
-                type="submit"
-                className="w-full bg-stone-900 dark:bg-ink-dark text-white py-3 text-xs tracking-widest hover:bg-[#8B6C42] transition-colors"
-              >
-                SEND MESSAGE
-              </button>
-            </form>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -58,3 +58,10 @@ export const apiUpdateOrderStatus = (id, status) =>
 
 // ── Admin ─────────────────────────────────────────────
 export const apiGetAdminStats = () => request('/admin/stats')
+
+// ── Contact ───────────────────────────────────────────
+export const apiSendContact = (name, email, subject, message) =>
+  request('/contact', {
+    method: 'POST',
+    body: JSON.stringify({ name, email, subject, message }),
+  })
