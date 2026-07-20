@@ -1,8 +1,8 @@
 import express        from 'express'
 import cors           from 'cors'
 import dotenv         from 'dotenv'
-import path           from 'path'          // ← ADD THIS
-import { fileURLToPath } from 'url'        // ← ADD THIS
+import path           from 'path'
+import { fileURLToPath } from 'url'
 import authRoutes     from './routes/auth.routes.js'
 import productRoutes  from './routes/product.routes.js'
 import orderRoutes    from './routes/order.routes.js'
@@ -13,7 +13,7 @@ dotenv.config()
 
 // Needed to get __dirname in ES modules
 const __filename = fileURLToPath(import.meta.url)
-const __dirname  = path.dirname(__filename)   // ← ADD THIS
+const __dirname  = path.dirname(__filename)
 
 const app = express()
 
@@ -45,8 +45,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')))
 
   // For any route that is NOT /api/..., send React's index.html
-  // This is what makes /shop, /blog, /cart etc work on page refresh
-  app.get('*', (_req, res) => {
+  // Updated for Express v5 wildcard syntax ({*path})
+  app.get('{*path}', (_req, res) => {
     res.sendFile(path.join(__dirname, '../dist/index.html'))
   })
 }
