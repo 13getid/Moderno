@@ -4,21 +4,21 @@ import { ThemeProvider } from './context/ThemeContext'
 import { AuthProvider, useAuth } from './context/AuthContext'
 
 // UI Components
-import Navbar    from './components/Navbar.jsx'
-import Footer    from './components/Footer.jsx'
+import Navbar    from './components/Navbar'
+import Footer    from './components/Footer'
 
 // Pages
-import Home      from './pages/Home.jsx'
-import Shop      from './pages/Shop.jsx'
-import About     from './pages/About.jsx'
-import Blog      from './pages/Blog.jsx'
-import BlogPost  from './pages/BlogPost.jsx'
-import Contact   from './pages/Contact.jsx'
-import Cart      from './pages/Cart.jsx'
-import Dashboard from './pages/Dashboard.jsx'
-import Login     from './pages/Login.jsx'
-import Register  from './pages/Register.jsx'
-import MyOrders  from './pages/MyOrders.jsx'
+import Home      from './pages/Home'
+import Shop      from './pages/Shop'
+import About     from './pages/About'
+import Blog      from './pages/Blog'
+import BlogPost  from './pages/BlogPost'
+import Contact   from './pages/Contact'
+import Cart      from './pages/Cart'
+import Dashboard from './pages/Dashboard'
+import Login     from './pages/Login'
+import Register  from './pages/Register'
+import MyOrders  from './pages/MyOrders'
 
 // PrivateRoute: if user is NOT logged in, send them to /login
 function PrivateRoute({ children }) {
